@@ -52,16 +52,10 @@ public class JogoDaVelha {
     
     public static void jogar(char[][] jogoDaVelha){
         TipoDeJogador jogador;
+        char vencedor = ' ';
         for (int numeroDeJogadas = 0; numeroDeJogadas < 9;) {
-            if(numeroDeJogadas % 2 == 0){
-                jogador = TipoDeJogador.X;
-            }
-            else {
-                jogador = TipoDeJogador.O;
-            }
-            System.out.printf("Em que linha deseja jogar %s? DIgite um par de linha coluna EX.: A0%n", jogador);
-            String comando = entrada.next();
-            comando = tratarEntrada(comando);
+            jogador = trocarJogador(numeroDeJogadas);
+            String comando = entradaDoJogador(jogador);
             if(comando == Erros.EntradaInválida.name()){
                 System.out.println("Erro, entrada inválida");
                 System.out.println(comando);
@@ -73,7 +67,7 @@ public class JogoDaVelha {
                 if(jogoDaVelha[linha][coluna] == '-'){
                     jogoDaVelha[linha][coluna] = jogador.toString().charAt(0);
                     mostrarJogo(jogoDaVelha);
-
+                    vencedor = verificaVencedor(jogoDaVelha);
                     numeroDeJogadas++;
                 }
                 else {
@@ -82,6 +76,22 @@ public class JogoDaVelha {
 
             }
         }
+    }
+
+    public static TipoDeJogador trocarJogador(int numeroDeJogadas){
+        if(numeroDeJogadas % 2 == 0){
+            return TipoDeJogador.X;
+        }
+        else {
+            return TipoDeJogador.O;
+        }
+    }
+
+    public static String entradaDoJogador(TipoDeJogador jogador){
+        System.out.printf("Jogador %S: Em que linha deseja jogar? DIgite um par de linha coluna EX.: A0%n", jogador);
+        String comando = entrada.next();
+        comando = tratarEntrada(comando);
+        return comando;
     }
 
     public static String tratarEntrada(String comando){
@@ -112,5 +122,31 @@ public class JogoDaVelha {
         }
 
         return comandoTratado;
+    }
+
+    public static char verificaVencedor(char[][] jogoDaVelha){
+        for (char[] chars : jogoDaVelha) {
+            if (chars[0] == chars[1] && chars[1] == chars[2]){
+                return chars[0];
+            }
+        }
+        if(jogoDaVelha[0][0] == jogoDaVelha[1][0] && jogoDaVelha[1][0] == jogoDaVelha[2][0]){
+            return jogoDaVelha[0][0];
+        }
+        if(jogoDaVelha[0][1] == jogoDaVelha[1][1] && jogoDaVelha[1][1] == jogoDaVelha[2][1]){
+            return jogoDaVelha[0][1];
+        }
+        if(jogoDaVelha[0][2] == jogoDaVelha[1][2] && jogoDaVelha[1][2] == jogoDaVelha[2][2]){
+            return jogoDaVelha[0][2];
+        }
+
+        if(jogoDaVelha[0][0] == jogoDaVelha [1][1] && jogoDaVelha[1][1] == jogoDaVelha[2][2])
+        {
+            return jogoDaVelha[0][0];
+        }
+        if (jogoDaVelha[0][2] == jogoDaVelha[1][1] && jogoDaVelha[1][1] == jogoDaVelha[2][0]){
+            return jogoDaVelha[0][2];
+        }
+        return ' ';
     }
 }
